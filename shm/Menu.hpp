@@ -19,7 +19,7 @@ public:
         Exit,
     };
 
-    Menu(Game*);
+    Menu(std::unique_ptr<Game>);
     ~Menu();
 
     void playerChoice();
@@ -29,5 +29,5 @@ public:
 
 private:
     MenuItem item_;
-    Game* game_;
+    std::unique_ptr<Game> game_;
 };

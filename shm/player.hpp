@@ -1,6 +1,5 @@
 #pragma once
 #include "Storable.hpp"
-#include <memory>
 #include "ship.hpp"
 
 class Cargo;
@@ -19,7 +18,7 @@ public:
     void setName(std::string playerName) {playerName_ = playerName;}
     std::string getName() {return playerName_;}
 
-    Cargo * getCargo(size_t) const override;
+    std::unique_ptr<Cargo> getCargo(size_t) const override;
     void setCrew(size_t newCrewSize);
     void setStartingCargo();
 };

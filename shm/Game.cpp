@@ -4,13 +4,13 @@
 class Map;
 
 Game::Game(size_t money, size_t gameDays, size_t finalGoal)
-    : time_(new Time()),
+    : time_(std::make_unique<Time>()),
       money_(money),
       gameDays_(gameDays),
       finalGoal_(finalGoal),
       menu_(std::make_unique<Menu>(this)),
-      map_(new Map(time_)),
-      playerOne_(new Player(std::make_unique<Ship>(20, 30, 10, "Dar Pomorza", 3, time_), 1000, 1000))
+      map_(std::make_unique<Map>(time_)),
+      playerOne_(std::make_unique<Player>(std::make_unique<Ship>(20, 30, 10, "Dar Pomorza", 3, time_), 1000, 1000))
 
 {}
 
@@ -55,8 +55,8 @@ void Game::setPlayer()
     playerOne_->setName(playerName);
     setStartingCargo();
     std::cout << "Welcome on board captain " << playerOne_->getName() << '\n';
-    map_->changeCurrentPosition(&map_->islands_.at(0));
-    currentStore_ = map_->islands_.at(0).returnIslandStore();
+    map_->changeCurrentPosition(std::move(map_->islands_.at(0)));
+    currentStore_ = map_->islands_.at(0)->returnIslandStore();
     std::cout << "Your's ship " << playerOne_->getShip()->getName() << " is waiting! Good Luck!" << '\n';
     std::cout << "You are in start point. ";
     map_->PrintCurrentPosition();
@@ -80,12 +80,12 @@ void Game::travel()
     std::cin >> i;
     if (isdigit(i) && i < (int)map_->islands_.size() && i >= 0)
     {
-        auto travelTime = map_->calculateDistance(map_->islands_.at(i)) / playerOne_->getSpeed();
+        auto travelTime = map_->calculateDistance(std::move(map_->islands_.at(i))) / playerOne_->getSpeed();
         std::cout << "Your travel will take " << travelTime << " days." << '\n';
-        map_->changeCurrentPosition(&map_->islands_.at(i));
+        map_->changeCurrentPosition(std::move(map_->islands_.at(i)));
         map_->PrintCurrentPosition();
         time_->changeTime(travelTime);
-        currentStore_ = map_->islands_.at(i).returnIslandStore();
+        currentStore_ = map_->islands_.at(i)->returnIslandStore();
     }
     else
     {
@@ -103,10 +103,10 @@ void Game::printPlayerCargo()
 
 void Game::setStartingCargo()
 {
-    playerOne_->getShip()->shipCargo.push_back(new Fruit("Banany", 1, 40, time_, 5, 0));
-    playerOne_->getShip()->shipCargo.push_back(new Fruit("Apple", 1, 14, time_, 20, 0));
-    playerOne_->getShip()->shipCargo.push_back(new Alcohol("Rum", 1, 60, time_, 70));
-    playerOne_->getShip()->shipCargo.push_back(new Item("Hook", 1, 100, time_, Rarity::common));
+    playerOne_->getShip()->shipCargo.emplace_back(std::make_unique<Fruit> ("Banany", 1, 40, std::move(time_), 5, 0));
+    playerOne_->getShip()->shipCargo.emplace_back(std::make_unique<Fruit> ("Apple", 1, 14, std::move(time_), 20, 0));
+    playerOne_->getShip()->shipCargo.emplace_back(std::make_unique<Alcohol>("Rum", 1, 60, std::move(time_), 70));
+    playerOne_->getShip()->shipCargo.emplace_back(std::make_unique<Item>("Hook", 1, 100, std::move(time_), Rarity::common));
 }
 
 void Game::quitRequested()
@@ -140,7 +140,7 @@ void Game::buyCargo()
     {
         std::cout << "Choose amount: ";
         std::cin >> amount;
-        currentStore_->buy(currentStore_->storeCargo.at(cargoElement), amount, playerOne_);
+        currentStore_->buy(std::move(currentStore_->storeCargo.at(cargoElement)), amount, std::move(playerOne_));
     }
     else
     {
@@ -161,7 +161,7 @@ void Game::sellCargo()
     {
         std::cout << "Choose amount: ";
         std::cin >> amount;
-        currentStore_->sell(playerOne_->getCargo(cargoElement), amount, playerOne_);
+        currentStore_->sell(playerOne_->getCargo(cargoElement), amount, std::move(playerOne_));
     }
     else
     {

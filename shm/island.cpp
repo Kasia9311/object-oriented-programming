@@ -1,11 +1,11 @@
 #include "island.hpp"
 
-Island::Island(Coordinates position, Time  * time) 
-    : store_(1000, 100, time) 
-    , position_(position)
+Island::Island(Coordinates position, std::unique_ptr<Time> time) 
+    : store_(1000, 100, std::move(time)),
+     position_(position)
     {}
 
-Store* Island::returnIslandStore()
+std::unique_ptr<Store> Island::returnIslandStore()
 {
-    return &store_;
+    return std::make_unique<Store>(store_);
 }

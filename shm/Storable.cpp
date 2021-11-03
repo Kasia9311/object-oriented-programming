@@ -4,10 +4,10 @@ Storable::Storable(int money, size_t availableSpace)
     : money_(money), availableSpace_(availableSpace)
 {}
 
-Storable::Storable(int money, size_t availableSpace, Time *time)
-    : money_(money), availableSpace_(availableSpace), time_(time)
+Storable::Storable(int money, size_t availableSpace, std::unique_ptr<Time> time)
+    : money_(money), availableSpace_(availableSpace), time_(std::move(time))
 {
-    time_->attach(this);
+    time_->attach(std::make_unique<TimeEffectable>(this));
 }
 
 Storable::~Storable() {}

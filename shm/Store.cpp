@@ -13,17 +13,17 @@ std::vector<std::string> possibleAlcoholCargoNames = {"Whiskey", "Rum", "Vodka",
 std::vector<std::string> possibleItemCargoNames = {"Rope", "Hook", "Screw", "Spoon"};
 std::vector<Rarity> rarityChoice = {Rarity::common, Rarity::rare, Rarity::epic, Rarity::legendary};
 
-Store::Store(int money, size_t availableSpace, Time *time) : Storable(money, availableSpace, time)
+Store::Store(int money, size_t availableSpace, std::unique_ptr<Time> time) : Storable(money, availableSpace, std::move(time))
 
 {
     storeCargo.reserve(20);
-    SetUpRandomCargo(time);
+    SetUpRandomCargo(std::move(time));
     storeCargo.shrink_to_fit();
 }
 
 Store::~Store() {}
 
-void Store::SetUpRandomCargo(Time *time)
+void Store::SetUpRandomCargo(std::unique_ptr<Time> time)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -51,27 +51,27 @@ void Store::SetUpRandomCargo(Time *time)
     std::string alcoholCargoName = possibleAlcoholCargoNames[alcoholCargoNumber];
     std::string itemCargoName = possibleItemCargoNames[itemCargoNumber];
 
-    storeCargo.push_back(new Fruit(fruitCargoName, (cargoQuantity + 10), fruitPriceX, time, 15, 0));
-    storeCargo.push_back(new Alcohol(alcoholCargoName, cargoQuantity, alcoholPriceX, time, alcoholPercentage));
-    storeCargo.push_back(new Item(itemCargoName, (cargoQuantity / 2), itemPriceX, time, randomRarity));
+    storeCargo.emplace_back(new Fruit(fruitCargoName, (cargoQuantity + 10), fruitPriceX, std::move(time), 15, 0));
+    storeCargo.emplace_back(new Alcohol(alcoholCargoName, cargoQuantity, alcoholPriceX, std::move(time), alcoholPercentage));
+    storeCargo.emplace_back(new Item(itemCargoName, (cargoQuantity / 2), itemPriceX, std::move(time), randomRarity));
 }
 
-Cargo *Store::findMatchCargo(Cargo *cargo)
+std::unique_ptr<Cargo> Store::findMatchCargo(std::unique_ptr<Cargo> cargo)
 {
     for (auto &el : storeCargo)
     {
         if (*el == *cargo)
         {
-            return el;
+            return std::move(el);
         }
     }
 
     return nullptr;
 }
 
-Response Store::buy(Cargo *cargo, size_t amount, Player *player)
+Response Store::buy(std::unique_ptr<Cargo> cargo, size_t amount, std::unique_ptr<Player> player)
 {
-    if (findMatchCargo(cargo))
+    if (findMatchCargo(std::move(cargo)))
     {
         auto price = 0;
         price = (int)(amount * cargo->getPrice());
@@ -94,7 +94,7 @@ Response Store::buy(Cargo *cargo, size_t amount, Player *player)
 
         money_ += price;
         player->SpendMoney(price);
-        player->getShip()->load(cargo, amount);
+        player->getShip()->load(std::move(cargo), amount);
 
         return Response::done;
     }
@@ -104,10 +104,9 @@ Response Store::buy(Cargo *cargo, size_t amount, Player *player)
     }
 }
 
-Response Store::sell(Cargo *cargo, size_t amount, Player *player)
-
+Response Store::sell(std::unique_ptr<Cargo> cargo, size_t amount, std::unique_ptr<Player> player)
 {
-    if (player->getShip()->findMatchCargo(cargo))
+    if (player->getShip()->findMatchCargo(std::move(cargo)))
 
     {
         auto price = 0;
@@ -118,7 +117,7 @@ Response Store::sell(Cargo *cargo, size_t amount, Player *player)
 
             return Response::lack_of_space;
         }
-        if (player->getShip()->findMatchCargo(cargo)->getAmount() < amount)
+        if (player->getShip()->findMatchCargo(std::move(cargo))->getAmount() < amount)
         {
             std::cout << "Lack of cargo" << '\n';
 
@@ -139,8 +138,8 @@ Response Store::sell(Cargo *cargo, size_t amount, Player *player)
 
         money_ -= price;
 
-        addStoreCargo(cargo);
-        player->getShip()->unload(cargo, amount);
+        addStoreCargo(std::move(cargo));
+        player->getShip()->unload(std::move(cargo), amount);
         player->EarnMoney(price);
 
         return Response::done;
@@ -153,14 +152,14 @@ Response Store::sell(Cargo *cargo, size_t amount, Player *player)
     return Response::done;
 }
 
-Cargo *Store::getCargo(size_t index) const
+std::unique_ptr<Cargo> Store::getCargo(size_t index) const
 {
     return nullptr;
 }
 
 void Store::nextDay(size_t elapsedTime)
 {
-    for (auto el : storeCargo)
+    for (auto & el : storeCargo)
     {
         el->reduceAmount(1);
     }
@@ -169,7 +168,7 @@ void Store::nextDay(size_t elapsedTime)
 void Store::printStoreCargo()
 {
     auto i = 0;
-    for (auto el : storeCargo)
+    for (auto & el : storeCargo)
     {
         std::cout << '\n';
         el->printCargo(i);
@@ -177,9 +176,9 @@ void Store::printStoreCargo()
     }
 }
 
-void Store::removeCargo(Cargo *item, size_t amount)
+void Store::removeCargo(std::unique_ptr<Cargo> item, size_t amount)
 {
-    auto storeCargoAmount = findMatchCargo(item)->getAmount();
+    auto storeCargoAmount = findMatchCargo(std::move(item))->getAmount();
     if (storeCargoAmount == amount)
     {
         auto i = std::find(begin(storeCargo), end(storeCargo), item);
@@ -187,13 +186,13 @@ void Store::removeCargo(Cargo *item, size_t amount)
     }
     else
     {
-        findMatchCargo(item)->reduceAmount(amount);
+        findMatchCargo(std::move(item))->reduceAmount(amount);
     }
 }
 
-void Store::addStoreCargo(Cargo *item)
+void Store::addStoreCargo(std::unique_ptr<Cargo> item)
 {
-    auto cargoPtr = findMatchCargo(item);
+    auto cargoPtr = findMatchCargo(std::move(item));
     if (cargoPtr)
     {
         cargoPtr->increaseAmount(item->getAmount());

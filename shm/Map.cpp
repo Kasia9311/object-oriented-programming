@@ -17,12 +17,12 @@ namespace constVariables
 
 } // namespace constVariables
 
-Map::Map(Time *time)
+Map::Map(std::unique_ptr<Time> time)
 {
-    SetUpRandomIsland(time);
+    SetUpRandomIsland(std::move(time));
 }
 
-void Map::SetUpRandomIsland(Time *time)
+void Map::SetUpRandomIsland(std::unique_ptr<Time> time)
 {
     islands_.reserve(constVariables::ISLANDS_COUNT);
     std::random_device rd;
@@ -43,7 +43,7 @@ void Map::SetUpRandomIsland(Time *time)
             c.SetPositionY(y);
         }
 
-        islands_.push_back(Island(c, time));
+        islands_.emplace_back(Island(c, std::move(time)));
         cords.push_back(c);
     }
 }
@@ -53,7 +53,7 @@ void Map::DebugPrintIsland()
     int j = 0;
     for (auto &el : islands_)
     {
-        std::cout << j << " | " << std::to_string(el.getPosition().GetPositionX()) << " | " << std::to_string(el.getPosition().GetPositionY()) << '\n';
+        std::cout << j << " | " << std::to_string(el->getPosition().GetPositionX()) << " | " << std::to_string(el->getPosition().GetPositionY()) << '\n';
 
         j++;
     }
@@ -69,18 +69,18 @@ bool Map::contains(const std::vector<Coordinates> &vec, const Coordinates &c)
     return std::find(vec.begin(), vec.end(), c) != vec.end();
 }
 
-size_t Map::calculateDistance(Island island_pos_)
+size_t Map::calculateDistance(std::unique_ptr<Island> island_pos_)
 {
     const auto distanceX = current_pos_->getPosition().GetPositionX();
     const auto distanceY = current_pos_->getPosition().GetPositionY();
-    const auto disX = island_pos_.getPosition().GetPositionX();
-    const auto disY = island_pos_.getPosition().GetPositionY();
+    const auto disX = island_pos_->getPosition().GetPositionX();
+    const auto disY = island_pos_->getPosition().GetPositionY();
     const auto distance = sqrt(pow((disX - distanceX), 2) + pow((disY - distanceY), 2));
     std::cout << "Distance: " << distance << '\n';
     return (size_t)distance;
 }
 
-void Map::addIsland(Coordinates &coordinate, Time *time)
+void Map::addIsland(Coordinates &coordinate, std::unique_ptr<Time> time)
 {
-    islands_.push_back(Island(coordinate, time));
+    islands_.emplace_back(std::make_unique<Island>(coordinate, std::move(time)));
 }

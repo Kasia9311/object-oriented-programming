@@ -2,8 +2,8 @@
 #include "Menu.hpp"
 #include "Game.hpp"
 
-Menu::Menu(Game* game)
-    : game_(game)
+Menu::Menu(std::unique_ptr<Game> game)
+    : game_(std::move(game))
 {}
 
 Menu::~Menu() {}

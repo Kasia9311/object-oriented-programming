@@ -28,13 +28,13 @@ public:
     void endGameLose();
     
 private:
-    Time* time_;
+    std::unique_ptr<Time> time_;
     size_t money_;
     size_t gameDays_;
     size_t finalGoal_;
     bool quitRequest = false;
     std::unique_ptr<Menu> menu_;
-    Map* map_;
-    Store* currentStore_;
-    Player* playerOne_;
+    std::unique_ptr<Map> map_;
+    std::unique_ptr<Store> currentStore_;
+    std::unique_ptr<Player> playerOne_;
 };

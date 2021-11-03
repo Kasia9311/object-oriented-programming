@@ -16,11 +16,11 @@ class Item : public Cargo
 {
 public:
 
-    Item(const std::string &name, size_t amount, size_t basePrice, Time *time, Rarity rarity);
+    Item(const std::string &name, size_t amount, size_t basePrice,  std::unique_ptr<Time> time, Rarity rarity);
     ~Item() override = default;
 
     // override from Cargo
-    Cargo* clone() override;
+    std::unique_ptr<Cargo> clone() override;
     size_t getPrice() const override;
     const std::string &getName() const override { return name_; }
     size_t getAmount() const override { return amount_; }

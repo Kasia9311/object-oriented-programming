@@ -5,15 +5,15 @@
 //Class responsible for representing alcohol in the game
 class Alcohol : public Cargo {
 public:
-    Alcohol(const std::string& name, size_t amount, size_t basePrice, Time *time, size_t percentage)
-        : Cargo(name, amount, basePrice, time)
+    Alcohol(const std::string& name, size_t amount, size_t basePrice, std::unique_ptr<Time> time, size_t percentage)
+        : Cargo(name, amount, basePrice, std::move(time))
         , percentage_ (percentage)
         {}
 
     ~Alcohol() override;
 
     // override from Cargo
-    Cargo* clone() override;
+    std::unique_ptr<Cargo> clone() override;
     size_t getPrice() const override;
     const std::string &getName() const override { return name_; }
     size_t getAmount() const override { return amount_; }

@@ -1,6 +1,7 @@
 #pragma once
 #include "coordinates.hpp"
 #include "Store.hpp"
+#include <memory>
 
 //Class responsible for representing island in game
 
@@ -9,8 +10,8 @@ private:
     Store store_;
     Coordinates position_;
 public:
-    explicit Island(Coordinates, Time*);
+    explicit Island(Coordinates, std::unique_ptr<Time> );
     Coordinates getPosition() { return position_; }
     void SetPosition(const Coordinates& position) { position_ = position; }
-    Store* returnIslandStore();
+    std::unique_ptr<Store> returnIslandStore();
 };

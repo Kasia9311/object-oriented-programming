@@ -42,7 +42,7 @@ void Alcohol::nextDay(size_t elapsedTime)
 {
     basePrice_ += (elapsedTime * 2);
 }
-Cargo* Alcohol::clone()
+std::unique_ptr<Cargo>  Alcohol::clone()
 {
-    return new Alcohol(*this);
+    return std::make_unique<Alcohol>(this);
 }
