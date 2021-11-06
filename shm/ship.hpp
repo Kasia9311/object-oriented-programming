@@ -12,9 +12,9 @@ class Player;
 //Class responsible for representing ship in game
 class Ship : public TimeEffectable {
 public:
-    Ship(std::unique_ptr<Time> time);
-    Ship(int capacity, int Crew, int speed, const std::string& name, size_t id, std::unique_ptr<Time>  time);
-    Ship(int maxCrew, int speed, size_t id, std::unique_ptr<Time>  time);
+    Ship(Time* time);
+    Ship(int capacity, int Crew, int speed, const std::string& name, size_t id, Time*  time);
+    Ship(int maxCrew, int speed, size_t id, Time* time);
     ~Ship();
     void setName(const std::string& name) { name_ = name; }
 
@@ -30,6 +30,7 @@ public:
     size_t getCrew() const     { return crew_; }
     std::string getName() const { return name_; }
     size_t getId() const        { return id_; }
+    std::vector<std::unique_ptr<Cargo>> getCargo() { return std::move(shipCargo);} //fix it!
     std::vector<std::unique_ptr<Cargo>> shipCargo; 
 
     std::unique_ptr<Cargo> findMatchCargo(std::unique_ptr<Cargo>);

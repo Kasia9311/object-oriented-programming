@@ -1,14 +1,14 @@
 #include <iostream>
 #include "fruit.hpp"
-
-Fruit::Fruit(const std::string &name, size_t amount, size_t basePrice, std::unique_ptr<Time> time, size_t expiry_date, size_t time_elapsed)
-    : Cargo(name, amount, basePrice, std::move(time)), time_elapsed_(time_elapsed), expiry_date_(expiry_date)
+Fruit::Fruit(){};
+Fruit::Fruit(std::string name, size_t amount, size_t basePrice, Time* time, size_t expiry_date, size_t time_elapsed)
+    : Cargo(name, amount, basePrice, time)
+    , time_elapsed_(time_elapsed)
+    , expiry_date_(expiry_date)
 {}
 
 Fruit::~Fruit()
-{
-    // this->time_.detach(this);
-}
+{}
 
 size_t Fruit::getPrice() const
 {
@@ -58,5 +58,5 @@ void Fruit::nextDay(size_t elapsedTime)
 
 std::unique_ptr<Cargo> Fruit::clone()
 {
-    return std::make_unique<Fruit>(this);
+    return std::move(std::make_unique<Fruit>(this));
 }

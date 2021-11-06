@@ -5,8 +5,8 @@
 //Class responsible for representing alcohol in the game
 class Alcohol : public Cargo {
 public:
-    Alcohol(const std::string& name, size_t amount, size_t basePrice, std::unique_ptr<Time> time, size_t percentage)
-        : Cargo(name, amount, basePrice, std::move(time))
+    Alcohol(const std::string& name, size_t amount, size_t basePrice, Time* time, size_t percentage)
+        : Cargo(name, amount, basePrice, time)
         , percentage_ (percentage)
         {}
 

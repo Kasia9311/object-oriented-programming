@@ -26,7 +26,7 @@ enum class Response
 
 class Store: public Storable {
 public:
-    Store(int money, size_t availableSpace, std::unique_ptr<Time> time);
+    Store(int money, size_t availableSpace, Time* time);
     
     virtual ~Store();   
     Response buy(std::unique_ptr<Cargo> cargo, size_t amount, std::unique_ptr<Player> player);
@@ -50,5 +50,5 @@ public:
         return out;
     }
 private:
-    void SetUpRandomCargo(std::unique_ptr<Time>);
+    void SetUpRandomCargo(Time*);
 };

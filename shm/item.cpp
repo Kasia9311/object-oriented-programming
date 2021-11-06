@@ -1,8 +1,8 @@
 #include "item.hpp"
 #include "Time.hpp"
 
-Item::Item(const std::string &name, size_t amount, size_t basePrice,  std::unique_ptr<Time> time, Rarity rarity)
-    : Cargo(name, amount, basePrice, std::move(time)), rarity_(rarity)
+Item::Item(const std::string &name, size_t amount, size_t basePrice,  Time* time, Rarity rarity)
+    : Cargo(name, amount, basePrice, time), rarity_(rarity)
 {}
 
 size_t Item::getPrice() const
@@ -50,5 +50,5 @@ void Item::nextDay(size_t elapsedTime)
 }
 std::unique_ptr<Cargo> Item::clone()
 {
-    return std::make_unique<Item>(this);
+    return std::move(std::make_unique<Item>(this));
 }

@@ -2,13 +2,13 @@
 #include <iostream>
 #include "cargo.hpp"
 
-Cargo::Cargo(std::string name, size_t amount, size_t basePrice, std::unique_ptr<Time> time)
+Cargo::Cargo(std::string name, size_t amount, size_t basePrice, Time* time)
     : name_(name)
     , amount_(amount)
     , basePrice_(basePrice)
-    , time_(std::move(time))
+    , time_(time)
 {
-    time->attach(std::make_unique<TimeEffectable>(this));
+    time->attach(this);
 }
 
 Cargo& Cargo::operator+=(size_t amount)

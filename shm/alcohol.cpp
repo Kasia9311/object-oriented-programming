@@ -44,5 +44,5 @@ void Alcohol::nextDay(size_t elapsedTime)
 }
 std::unique_ptr<Cargo>  Alcohol::clone()
 {
-    return std::make_unique<Alcohol>(this);
+    return std::move(std::make_unique<Alcohol>(this));
 }

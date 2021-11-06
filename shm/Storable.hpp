@@ -14,7 +14,7 @@ public:
     Storable(int money, size_t availableSpace);
 
     //Constructor for objects subscribed to Time class (i.e. Store)
-    Storable(int money, size_t availableSpace, std::unique_ptr<Time> time);
+    Storable(int money, size_t availableSpace, Time* time);
 
     virtual ~Storable();
 
@@ -28,5 +28,5 @@ public:
 protected:
     int money_;
     size_t availableSpace_;
-    std::unique_ptr<Time> time_;
+    Time* time_;
 };

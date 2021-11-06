@@ -25,12 +25,12 @@ public:
     void increaseAmount(size_t);
     void setAmount(size_t);
     Cargo() = default;
-    Cargo(std::string name, size_t amount, size_t basePrice, std::unique_ptr<Time> time);
+    Cargo(std::string name, size_t amount, size_t basePrice, Time* time);
     virtual ~Cargo() = default;
 
 protected:
     std::string name_;
     size_t amount_;
     size_t basePrice_;
-    std::unique_ptr<Time> time_;
+    Time* time_;
 };

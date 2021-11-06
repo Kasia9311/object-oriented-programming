@@ -4,7 +4,7 @@
 class Map;
 
 Game::Game(size_t money, size_t gameDays, size_t finalGoal)
-    : time_(std::make_unique<Time>()),
+    : time_(new Time()),
       money_(money),
       gameDays_(gameDays),
       finalGoal_(finalGoal),

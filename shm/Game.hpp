@@ -28,7 +28,7 @@ public:
     void endGameLose();
     
 private:
-    std::unique_ptr<Time> time_;
+    Time* time_;
     size_t money_;
     size_t gameDays_;
     size_t finalGoal_;

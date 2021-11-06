@@ -13,17 +13,17 @@ std::vector<std::string> possibleAlcoholCargoNames = {"Whiskey", "Rum", "Vodka",
 std::vector<std::string> possibleItemCargoNames = {"Rope", "Hook", "Screw", "Spoon"};
 std::vector<Rarity> rarityChoice = {Rarity::common, Rarity::rare, Rarity::epic, Rarity::legendary};
 
-Store::Store(int money, size_t availableSpace, std::unique_ptr<Time> time) : Storable(money, availableSpace, std::move(time))
+Store::Store(int money, size_t availableSpace, Time* time) : Storable(money, availableSpace, time)
 
 {
     storeCargo.reserve(20);
-    SetUpRandomCargo(std::move(time));
+    SetUpRandomCargo(time);
     storeCargo.shrink_to_fit();
 }
 
 Store::~Store() {}
 
-void Store::SetUpRandomCargo(std::unique_ptr<Time> time)
+void Store::SetUpRandomCargo(Time* time)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -51,9 +51,9 @@ void Store::SetUpRandomCargo(std::unique_ptr<Time> time)
     std::string alcoholCargoName = possibleAlcoholCargoNames[alcoholCargoNumber];
     std::string itemCargoName = possibleItemCargoNames[itemCargoNumber];
 
-    storeCargo.emplace_back(new Fruit(fruitCargoName, (cargoQuantity + 10), fruitPriceX, std::move(time), 15, 0));
-    storeCargo.emplace_back(new Alcohol(alcoholCargoName, cargoQuantity, alcoholPriceX, std::move(time), alcoholPercentage));
-    storeCargo.emplace_back(new Item(itemCargoName, (cargoQuantity / 2), itemPriceX, std::move(time), randomRarity));
+    storeCargo.emplace_back(std::move(std::make_unique<Fruit>(fruitCargoName, (cargoQuantity + 10), fruitPriceX, std::move(time), 15, 0)));
+    storeCargo.emplace_back(std::move(std::make_unique<Alcohol>(alcoholCargoName, cargoQuantity, alcoholPriceX, std::move(time), alcoholPercentage)));
+    storeCargo.emplace_back(std::move(std::make_unique<Item>(itemCargoName, (cargoQuantity / 2), itemPriceX, std::move(time), randomRarity)));
 }
 
 std::unique_ptr<Cargo> Store::findMatchCargo(std::unique_ptr<Cargo> cargo)
@@ -199,6 +199,6 @@ void Store::addStoreCargo(std::unique_ptr<Cargo> item)
     }
     else
     {
-        storeCargo.emplace_back(item);
+        storeCargo.emplace_back(std::move(item));
     }
 }

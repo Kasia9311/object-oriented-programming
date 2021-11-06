@@ -10,12 +10,12 @@ Time::Time()
 
 Time::~Time(){}
 
-void Time::attach(std::unique_ptr<TimeEffectable> observer)
+void Time::attach (TimeEffectable* observer)
 {   
     list_observer_.emplace_back(observer);
 }
 
-void Time::detach(std::unique_ptr<TimeEffectable> observer)
+void Time::detach(TimeEffectable* observer)
 {
     list_observer_.remove(observer);
 }

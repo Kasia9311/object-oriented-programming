@@ -17,12 +17,12 @@ namespace constVariables
 
 } // namespace constVariables
 
-Map::Map(std::unique_ptr<Time> time)
+Map::Map(Time* time)
 {
-    SetUpRandomIsland(std::move(time));
+    SetUpRandomIsland(time);
 }
 
-void Map::SetUpRandomIsland(std::unique_ptr<Time> time)
+void Map::SetUpRandomIsland(Time* time)
 {
     islands_.reserve(constVariables::ISLANDS_COUNT);
     std::random_device rd;
@@ -43,7 +43,7 @@ void Map::SetUpRandomIsland(std::unique_ptr<Time> time)
             c.SetPositionY(y);
         }
 
-        islands_.emplace_back(Island(c, std::move(time)));
+        islands_.emplace_back(Island(c, time));
         cords.push_back(c);
     }
 }
@@ -80,7 +80,7 @@ size_t Map::calculateDistance(std::unique_ptr<Island> island_pos_)
     return (size_t)distance;
 }
 
-void Map::addIsland(Coordinates &coordinate, std::unique_ptr<Time> time)
+void Map::addIsland(Coordinates &coordinate, Time* time)
 {
-    islands_.emplace_back(std::make_unique<Island>(coordinate, std::move(time)));
+    islands_.emplace_back(std::make_unique<Island>(coordinate, time));
 }

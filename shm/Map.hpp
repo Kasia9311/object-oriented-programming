@@ -10,7 +10,7 @@ class Coordinates;
 //Class responsible for representing map in game
 class Map {
 public:
-    Map(std::unique_ptr<Time> time);
+    Map(Time* time);
     void DebugPrintIsland();
     void PrintCurrentPosition();
     friend class Game;
@@ -18,11 +18,11 @@ public:
     void changeCurrentPosition(std::unique_ptr<Island> position) {current_pos_ = std::move(position);}
     size_t calculateDistance(std::unique_ptr<Island>);
     std::unique_ptr<Island> getIsland(const Coordinates &);
-    void addIsland(Coordinates &, std::unique_ptr<Time>);
+    void addIsland(Coordinates &, Time*);
 
 private:
     std::unique_ptr<Island> current_pos_;
     std::vector<std::unique_ptr<Island>> islands_;
     bool contains(const std::vector<Coordinates>&, const Coordinates&);
-    void SetUpRandomIsland(std::unique_ptr<Time>);
+    void SetUpRandomIsland(Time*);
 };

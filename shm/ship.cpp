@@ -7,23 +7,23 @@
 #include "alcohol.hpp"
 #include "item.hpp"
 
-Ship::Ship(std::unique_ptr<Time> time)
-    : id_(-1), time_(std::move(time))
+Ship::Ship(Time* time)
+    : id_(-1), time_(time)
 {
-    time_->attach(std::make_unique<TimeEffectable>(this));
+    time_->attach(this);
 }
 
-Ship::Ship(int capacity, int Crew, int speed, const std::string &name, size_t id, std::unique_ptr<Time> time)
-    : capacity_(capacity), crew_(Crew), speed_(speed), name_(name), id_(id), time_(std::move(time))
+Ship::Ship(int capacity, int Crew, int speed, const std::string &name, size_t id, Time* time)
+    : capacity_(capacity), crew_(Crew), speed_(speed), name_(name), id_(id), time_(time)
 {}
 
-Ship::Ship(int maxCrew, int speed, size_t id, std::unique_ptr<Time> time)
-    : Ship(0, maxCrew, speed, "", id, std::move(time))
+Ship::Ship(int maxCrew, int speed, size_t id, Time* time)
+    : Ship(0, maxCrew, speed, "", id, time)
 {}
 
 Ship::~Ship()
 {
-    time_->detach(std::make_unique<TimeEffectable>(this));
+    time_->detach(this);
 }
 
 Ship &Ship::operator-=(size_t num)
@@ -63,7 +63,7 @@ void Ship::removeCargo(std::unique_ptr<Cargo> item, size_t amount)
     const auto shipCargoAmount = findMatchCargo(std::move(item))->getAmount();
     if (shipCargoAmount == amount)
     {
-        const auto it = std::find_if(shipCargo.begin(), shipCargo.end(), [&item](std::unique_ptr<Cargo> el)
+        const auto it = std::find_if(shipCargo.begin(), shipCargo.end(), [&item](std::unique_ptr<Cargo> & el)
                                      { return &el == &item; });
         if (it != shipCargo.end())
         {
@@ -158,7 +158,7 @@ void Ship::printShipCargo()
 size_t Ship::calculateAvailableSpace()
 {
     int cargoAmount = 0;
-    cargoAmount = std::accumulate(shipCargo.begin(), shipCargo.end(), 0, [](int i, Cargo *c)
+    cargoAmount = std::accumulate(shipCargo.begin(), shipCargo.end(), 0, [](int i, std::unique_ptr<Cargo> & c)
                                   { return i += (int)c->getAmount(); });
     if ((int)capacity_ - cargoAmount < 0)
     {

@@ -8,7 +8,7 @@ Player::Player(std::unique_ptr<Ship> ship, int money, int availableSpace)
     : Storable(money, availableSpace)
 {
     ship_ = std::move(ship);
-    ship_.get()->setOwner(std::make_unique<Player>(this));
+    ship_.get()->setOwner(std::move(std::make_unique<Player>(this)));
 }
 
 Player::~Player() {}
@@ -41,7 +41,7 @@ size_t Player::calculateAvailableSpace()
     int cargoAmount = 0;
     int capacity = (int)ship_->getCapacity();
     std::vector<std::unique_ptr<Cargo>> shipCargo = ship_->getCargo();
-    cargoAmount = std::accumulate(shipCargo.begin(), shipCargo.end(), 0, [](int i, std::unique_ptr<Cargo> c)
+    cargoAmount = std::accumulate(shipCargo.begin(), shipCargo.end(), 0, [](int i, std::unique_ptr<Cargo> & c)
                                   { return i += (int)c->getAmount(); });
 
     if (capacity - cargoAmount < 0)

@@ -7,10 +7,10 @@
 
 class Island {
 private:
-    Store store_;
+    std::unique_ptr<Store> store_;
     Coordinates position_;
 public:
-    explicit Island(Coordinates, std::unique_ptr<Time> );
+    explicit Island(Coordinates, Time* );
     Coordinates getPosition() { return position_; }
     void SetPosition(const Coordinates& position) { position_ = position; }
     std::unique_ptr<Store> returnIslandStore();
