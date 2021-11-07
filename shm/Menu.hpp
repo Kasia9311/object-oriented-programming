@@ -9,6 +9,8 @@ class Game;
 class Menu 
 {
 public:
+    Menu(Game*);
+    ~Menu();
     enum MenuItem
     {
         printPlayerCargo,
@@ -19,9 +21,6 @@ public:
         Exit,
     };
 
-    Menu(std::unique_ptr<Game>);
-    ~Menu();
-
     void playerChoice();
     bool isPlayerChoiceValid(const size_t &playerAnswer) const;
     void menuChoice(MenuItem) const;
@@ -29,5 +28,5 @@ public:
 
 private:
     MenuItem item_;
-    std::unique_ptr<Game> game_;
+    Game* game_;
 };

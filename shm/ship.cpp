@@ -83,7 +83,7 @@ std::unique_ptr<Cargo> Ship::findMatchCargo(std::unique_ptr<Cargo> cargo)
                       return (c == cargo);
                   });
     auto cargoPosition = std::distance(shipCargo.begin(), foundCargo);
-    shipCargo[cargoPosition];
+    return std::move(shipCargo[cargoPosition]);
 }
 
 void Ship::load(std::unique_ptr<Cargo> loadCargo, size_t amount)

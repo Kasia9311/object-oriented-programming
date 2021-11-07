@@ -53,5 +53,5 @@ protected:
     const size_t id_;
     
     std::unique_ptr<Player> owner_ = nullptr;
-    std::unique_ptr<Time> time_;
+    Time* time_;
 };

@@ -10,7 +10,7 @@ class Game
 {
 public:
     Game(size_t money, size_t gameDays, size_t finalGoal);
-    Game();
+    ~Game();
 
     void displayPlayerStats();
     void setPlayer();

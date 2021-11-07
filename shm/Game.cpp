@@ -4,17 +4,16 @@
 class Map;
 
 Game::Game(size_t money, size_t gameDays, size_t finalGoal)
-    : time_(new Time()),
-      money_(money),
-      gameDays_(gameDays),
-      finalGoal_(finalGoal),
-      menu_(std::make_unique<Menu>(this)),
-      map_(std::make_unique<Map>(time_)),
-      playerOne_(std::make_unique<Player>(std::make_unique<Ship>(20, 30, 10, "Dar Pomorza", 3, time_), 1000, 1000))
-
+    : time_(new Time())
+    , money_(money)
+    , gameDays_(gameDays)
+    , finalGoal_(finalGoal)
+    , menu_(std::make_unique<Menu>(this)) // ToDo: rewrite Menu class so that it does not need Game object
+    , map_(std::make_unique<Map>(time_))
+    // , playerOne_(std::make_unique<Player>(std::make_unique<Ship>(20, 30, 10, "Dar Pomorza", 3, time_), 1000, 1000))
 {}
 
-Game::Game() {}
+Game::~Game() {}
 
 void Game::startGame()
 {
@@ -49,6 +48,7 @@ void Game::printTitle()
 
 void Game::setPlayer()
 {
+    playerOne_ = std::make_unique<Player>(std::make_unique<Ship>(20, 30, 10, "Dar Pomorza", 3, time_), 1000, 1000);
     std::cout << "Set your name captain!:" << '\n';
     std::string playerName;
     std::cin >> playerName;

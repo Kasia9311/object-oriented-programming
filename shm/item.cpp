@@ -50,5 +50,5 @@ void Item::nextDay(size_t elapsedTime)
 }
 std::unique_ptr<Cargo> Item::clone()
 {
-    return std::move(std::make_unique<Item>(this));
+    return std::move(std::make_unique<Item>(name_, amount_, basePrice_, time_, rarity_));
 }

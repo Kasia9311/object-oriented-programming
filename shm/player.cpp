@@ -8,7 +8,7 @@ Player::Player(std::unique_ptr<Ship> ship, int money, int availableSpace)
     : Storable(money, availableSpace)
 {
     ship_ = std::move(ship);
-    ship_.get()->setOwner(std::move(std::make_unique<Player>(this)));
+    // ship_.get()->setOwner(this);
 }
 
 Player::~Player() {}

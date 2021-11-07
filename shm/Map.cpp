@@ -43,7 +43,7 @@ void Map::SetUpRandomIsland(Time* time)
             c.SetPositionY(y);
         }
 
-        islands_.emplace_back(Island(c, time));
+        islands_.emplace_back(std::move(std::make_unique<Island>(c, time)));
         cords.push_back(c);
     }
 }

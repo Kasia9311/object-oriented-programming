@@ -58,5 +58,6 @@ void Fruit::nextDay(size_t elapsedTime)
 
 std::unique_ptr<Cargo> Fruit::clone()
 {
-    return std::move(std::make_unique<Fruit>(this));
+
+    return std::move(std::make_unique<Fruit>(name_, amount_, basePrice_, time_, expiry_date_, time_elapsed_));
 }
