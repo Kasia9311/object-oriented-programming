@@ -1,6 +1,11 @@
 #include "alcohol.hpp"
 #include <iostream>
 
+Alcohol::Alcohol(const std::string& name, size_t amount, size_t basePrice, Time* time, size_t percentage)
+        : Cargo(name, amount, basePrice, time)
+        , percentage_ (percentage)
+        {}
+
 Alcohol::~Alcohol() {
     std::cout << "Alcohol " << name_ << " destructor" << '\n';
 }
