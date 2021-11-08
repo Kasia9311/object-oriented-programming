@@ -15,6 +15,7 @@ public:
     void PrintCurrentPosition();
     friend class Game;
     std::unique_ptr<Island> getCurrentPos() {return std::move(current_pos_);}
+    std::unique_ptr<Store> returnCurrentIslandStore() {return current_pos_->returnIslandStore();}
     void changeCurrentPosition(std::unique_ptr<Island> position) {current_pos_ = std::move(position);}
     size_t calculateDistance(std::unique_ptr<Island>);
     std::unique_ptr<Island> getIsland(const Coordinates &);

@@ -56,7 +56,7 @@ void Game::setPlayer()
     setStartingCargo();
     std::cout << "Welcome on board captain " << playerOne_->getName() << '\n';
     map_->changeCurrentPosition(std::move(map_->islands_.at(0)));
-    currentStore_ = map_->islands_.at(0)->returnIslandStore();
+    currentStore_ = map_->returnCurrentIslandStore();
     std::cout << "Your's ship " << playerOne_->getShip()->getName() << " is waiting! Good Luck!" << '\n';
     std::cout << "You are in start point. ";
     map_->PrintCurrentPosition();
