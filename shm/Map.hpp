@@ -14,15 +14,15 @@ public:
     void DebugPrintIsland();
     void PrintCurrentPosition();
     friend class Game;
-    std::unique_ptr<Island> getCurrentPos() {return std::move(current_pos_);}
+    Island* getCurrentPos() {return current_pos_;}
     std::unique_ptr<Store> returnCurrentIslandStore() {return current_pos_->returnIslandStore();}
-    void changeCurrentPosition(std::unique_ptr<Island> position) {current_pos_ = std::move(position);}
+    void changeCurrentPosition(Island* position) {current_pos_ = position;}
     size_t calculateDistance(std::unique_ptr<Island>);
     std::unique_ptr<Island> getIsland(const Coordinates &);
     void addIsland(Coordinates &, Time*);
 
 private:
-    std::unique_ptr<Island> current_pos_;
+    Island* current_pos_;
     std::vector<std::unique_ptr<Island>> islands_;
     bool contains(const std::vector<Coordinates>&, const Coordinates&);
     void SetUpRandomIsland(Time*);

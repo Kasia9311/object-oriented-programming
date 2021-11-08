@@ -43,7 +43,7 @@ void Map::SetUpRandomIsland(Time* time)
             c.SetPositionY(y);
         }
 
-        islands_.emplace_back(std::move(std::make_unique<Island>(c, time)));
+        islands_.emplace_back(std::make_unique<Island>(c, time));
         cords.push_back(c);
     }
 }
@@ -51,7 +51,7 @@ void Map::SetUpRandomIsland(Time* time)
 void Map::DebugPrintIsland()
 {
     int j = 0;
-    for (auto &el : islands_)
+    for (const auto &el : islands_)
     {
         std::cout << j << " | " << std::to_string(el->getPosition().GetPositionX()) << " | " << std::to_string(el->getPosition().GetPositionY()) << '\n';
 

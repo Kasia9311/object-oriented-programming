@@ -32,7 +32,6 @@ Cargo &Item::operator-=(size_t amount)
 
 bool Item::operator==(const Cargo &other) const
 {
-
     try
     {
         const Item &other_item = dynamic_cast<const Item &>(other);
@@ -50,5 +49,5 @@ void Item::nextDay(size_t elapsedTime)
 }
 std::unique_ptr<Cargo> Item::clone()
 {
-    return std::move(std::make_unique<Item>(name_, amount_, basePrice_, time_, rarity_));
+    return std::make_unique<Item>(name_, amount_, basePrice_, time_, rarity_);
 }

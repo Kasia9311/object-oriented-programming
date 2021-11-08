@@ -55,7 +55,7 @@ void Game::setPlayer()
     playerOne_->setName(playerName);
     setStartingCargo();
     std::cout << "Welcome on board captain " << playerOne_->getName() << '\n';
-    map_->changeCurrentPosition(std::move(map_->islands_.at(0)));
+    map_->changeCurrentPosition(map_->islands_.at(0).get());
     currentStore_ = map_->returnCurrentIslandStore();
     std::cout << "Your's ship " << playerOne_->getShip()->getName() << " is waiting! Good Luck!" << '\n';
     std::cout << "You are in start point. ";
@@ -78,11 +78,12 @@ void Game::travel()
     printMap(*map_);
     std::cout << "Choose Your destination captain!" << '\n';
     std::cin >> i;
+    auto a = (int)map_->islands_.size();
     if (isdigit(i) && i < (int)map_->islands_.size() && i >= 0)
     {
         auto travelTime = map_->calculateDistance(std::move(map_->islands_.at(i))) / playerOne_->getSpeed();
         std::cout << "Your travel will take " << travelTime << " days." << '\n';
-        map_->changeCurrentPosition(std::move(map_->islands_.at(i)));
+        map_->changeCurrentPosition(map_->islands_.at(i).get());
         map_->PrintCurrentPosition();
         time_->changeTime(travelTime);
         currentStore_ = map_->islands_.at(i)->returnIslandStore();

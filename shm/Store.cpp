@@ -51,9 +51,9 @@ void Store::SetUpRandomCargo(Time* time)
     std::string alcoholCargoName = possibleAlcoholCargoNames[alcoholCargoNumber];
     std::string itemCargoName = possibleItemCargoNames[itemCargoNumber];
 
-    storeCargo.emplace_back(std::move(std::make_unique<Fruit>(fruitCargoName, (cargoQuantity + 10), fruitPriceX, std::move(time), 15, 0)));
-    storeCargo.emplace_back(std::move(std::make_unique<Alcohol>(alcoholCargoName, cargoQuantity, alcoholPriceX, std::move(time), alcoholPercentage)));
-    storeCargo.emplace_back(std::move(std::make_unique<Item>(itemCargoName, (cargoQuantity / 2), itemPriceX, std::move(time), randomRarity)));
+    storeCargo.emplace_back(std::make_unique<Fruit>(fruitCargoName, (cargoQuantity + 10), fruitPriceX, std::move(time), 15, 0));
+    storeCargo.emplace_back(std::make_unique<Alcohol>(alcoholCargoName, cargoQuantity, alcoholPriceX, std::move(time), alcoholPercentage));
+    storeCargo.emplace_back(std::make_unique<Item>(itemCargoName, (cargoQuantity / 2), itemPriceX, std::move(time), randomRarity));
 }
 
 std::unique_ptr<Cargo> Store::findMatchCargo(std::unique_ptr<Cargo> cargo)
